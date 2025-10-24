@@ -1,4 +1,4 @@
-### Frontdesk Human-in-the-Loop AI Supervisor
+# Frontdesk Human-in-the-Loop AI Supervisor
 
 ## Overview
 This project implements a human-in-the-loop AI system for handling customer inquiries.
@@ -38,19 +38,19 @@ HelpRequest: Tracks question, customer, status (PENDING, RESOLVED, UNRESOLVED), 
 
 ---
 ## Installation & Setup
-# Clone repo
+### Clone repo
 ```
 git clone <repo-url>
 cd AI-agent
 ```
-# Backend
+### Backend
 ```
 cd backend
 npm install
 # Add .env with MONGO_URI
 npm start
 ```
-# Frontend
+### Frontend
 ```
 cd ../frontend
 npm install
@@ -59,7 +59,7 @@ npm start
 Access frontend at http://localhost:3000.
 ---
 
-# Frontend UI
+## Frontend UI
 
 - Pending Requests: Shows all questions awaiting supervisor response.
 
@@ -69,7 +69,7 @@ Access frontend at http://localhost:3000.
 
 - Click a request → view details → answer or mark unresolved.
 
-# Backend APIs
+## Backend APIs
 
 - POST /api/ai/call → send question to AI.
 
