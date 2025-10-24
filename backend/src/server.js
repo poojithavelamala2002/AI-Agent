@@ -52,7 +52,7 @@ async function start() {
       app.use(express.static(buildPath));
 
       // Use app.get('*') to catch all routes for React Router
-      app.get('*', (req, res) => {
+      app.get(/.*/, (req, res) => {
         res.sendFile(path.join(buildPath, 'index.html'));
       });
       console.log('🌐 Serving frontend from build folder');
