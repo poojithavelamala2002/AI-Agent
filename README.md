@@ -59,7 +59,7 @@ npm start
 Access frontend at http://localhost:3000.
 ---
 
-## Usage
+### Usage
 # Frontend UI
 
 - Pending Requests: Shows all questions awaiting supervisor response.
@@ -91,10 +91,5 @@ Phase 1 Complete:
 - Admin UI for managing requests
 Phase 2 (Future Work): Live call integration, real-time supervisor handoff
 
----
-## Screenshots or UI Preview
-![App Preview](screenshots/app.png)
-![learned answers](screenshots/learned.png)
-![Pending Requests](screenshots/pending.png)
-![Unresolved Requests](screenshots/request.png)
+
 
