@@ -3,7 +3,7 @@ require('dotenv').config();
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
-const app = require('./app');
+const app = require('./app'); // your main Express app
 
 // Import models
 const HelpRequest = require('./models/HelpRequest');
@@ -18,14 +18,11 @@ const MONGO_URI = process.env.MONGO_URI;
 async function start() {
   try {
     if (!MONGO_URI) {
-      throw new Error('MONGO_URI not set in .env');
+      throw new Error('MONGO_URI not set in environment variables');
     }
 
     // Connect to MongoDB
-    await mongoose.connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(MONGO_URI);
     console.log('✅ Connected to MongoDB');
 
     // ⚡ Clear old data ONLY in development
@@ -38,10 +35,7 @@ async function start() {
     // 🔔 Timeout worker setup
     function notifyOnTimeout(req, reason) {
       console.log(`🔔 Timeout notify: request ${req._id} timed out (${reason}). Question: ${req.question}`);
-      // Optionally, send webhook/Slack notifications here
     }
-
-    // Start worker with 1-minute interval
     const { start: startWorker } = startTimeoutWorker({
       intervalMs: 60_000,
       notifyFn: notifyOnTimeout,
@@ -52,15 +46,16 @@ async function start() {
     // Health check route
     app.get('/health', (req, res) => res.json({ ok: true }));
 
-    // Serve frontend if in production
+    // Serve React frontend in production
     if (process.env.NODE_ENV === 'production') {
       const buildPath = path.join(__dirname, '../frontend/build');
       app.use(express.static(buildPath));
 
-      // Serve index.html for any unknown route (React Router support)
+      // Use app.get('*') to catch all routes for React Router
       app.get('*', (req, res) => {
         res.sendFile(path.join(buildPath, 'index.html'));
       });
+      console.log('🌐 Serving frontend from build folder');
     }
 
     // Start server
@@ -74,4 +69,5 @@ async function start() {
 }
 
 start();
+
 
