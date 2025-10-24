@@ -59,7 +59,6 @@ npm start
 Access frontend at http://localhost:3000.
 ---
 
-### Usage
 # Frontend UI
 
 - Pending Requests: Shows all questions awaiting supervisor response.
