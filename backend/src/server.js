@@ -1,5 +1,6 @@
 // backend/src/server.js
 require('dotenv').config();
+const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
@@ -43,19 +44,29 @@ async function start() {
     startWorker();
     console.log('⏱️ Timeout worker started (checks every 1 minute)');
 
-    // Health check route
+    // Health check route (ok to duplicate if present in app.js)
     app.get('/health', (req, res) => res.json({ ok: true }));
 
     // Serve React frontend in production
     if (process.env.NODE_ENV === 'production') {
-      const buildPath = path.join(__dirname, '../frontend/build');
-      app.use(express.static(buildPath));
+      // __dirname is backend/src — go up two levels to repo root then into frontend/build
+      const buildPath = path.join(__dirname, '../../frontend/build');
+      console.log('Looking for frontend build at:', buildPath);
 
-      // Use app.get('*') to catch all routes for React Router
-      app.get(/.*/, (req, res) => {
-        res.sendFile(path.join(buildPath, 'index.html'));
-      });
-      console.log('🌐 Serving frontend from build folder');
+      // confirm build exists
+      const indexPath = path.join(buildPath, 'index.html');
+      if (!fs.existsSync(indexPath)) {
+        console.error('❌ Frontend build missing. Expected index at:', indexPath);
+        // don't throw here — you might still want server APIs to run even if frontend isn't built
+      } else {
+        // serve static assets
+        app.use(express.static(buildPath));
+        // fallback to index.html for client-side routing — use regex to avoid path-to-regexp '*' issues
+        app.get(/.*/, (req, res) => {
+          res.sendFile(indexPath);
+        });
+        console.log('🌐 Serving frontend from build folder');
+      }
     }
 
     // Start server
@@ -69,5 +80,3 @@ async function start() {
 }
 
 start();
-
-
