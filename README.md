@@ -1,4 +1,4 @@
-# Frontdesk Human-in-the-Loop AI Supervisor
+# Human-in-the-Loop AI Supervisor
 
 ## Overview
 This project implements a human-in-the-loop AI system for handling customer inquiries.
